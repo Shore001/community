@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class HelloController {
-    @GetMapping("/hello")
-    public String hello(@RequestParam(name = "name") String name, Model model){
-        model.addAttribute("name",name);
-        return "hello";
+public class IndexController {
+    //访问根目录时返回结果
+    @GetMapping("/")
+    public String hello(){
+        return "index";
     }
 }
