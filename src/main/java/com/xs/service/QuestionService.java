@@ -47,8 +47,9 @@ public class QuestionService {
         //数据库分页查询偏移量
         int offset = (pageIndex-1)*pageSize;
         QuestionExample example = new QuestionExample();
+        example.setOrderByClause("gmt_create desc");
         /*分页查询*/
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(null,new RowBounds(offset,pageSize));//分页查询
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset,pageSize));//分页查询
         List<QuestionDTO> questionDTOList = new ArrayList<>();//查询结果的数据传输对象集合
         questionList.forEach(question -> {
             User user = userMapper.selectByPrimaryKey(question.getCreator());//查询作者
@@ -78,7 +79,9 @@ public class QuestionService {
         paginationDTO.setPagination(totalPage,pageIndex);//设置分页数据
         //数据库分页查询偏移量
         int offset = (pageIndex-1)*pageSize;
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(null,new RowBounds(offset,pageSize));//分页查询
+        QuestionExample example1 = new QuestionExample();
+        example1.setOrderByClause("gmt_create desc");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example1,new RowBounds(offset,pageSize));//分页查询
         List<QuestionDTO> questionDTOList = new ArrayList<>();//查询结果的数据传输对象集合
         for (Question question:questionList){
             User user = userMapper.selectByPrimaryKey(question.getCreator());//查询作者
