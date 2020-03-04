@@ -53,7 +53,6 @@ public class GithubProvider {
             Response response = client.newCall(request).execute();
             //执行请求，得到返回结果
             String string = response.body().string();
-            System.out.println(string);
             //json转换
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             response.close();

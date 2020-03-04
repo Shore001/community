@@ -1,19 +1,33 @@
 package com.xs.mapper;
 
-
 import com.xs.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import com.xs.model.UserExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
-@Mapper
 public interface UserMapper {
-    @Insert("insert into USER(name,account_id,token,gmt_create,gmt_modify,avatar_url) values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModify},#{avatarUrl})")
-    public void insert(User user);
+    long countByExample(UserExample example);
 
-    @Select("select * from USER where TOKEN=#{token}")
-    User findByToken(String token);
+    int deleteByExample(UserExample example);
 
-    @Select("select * from USER where id=#{id}")
-    User findById(Integer creator);
+    int deleteByPrimaryKey(Long id);
+
+    int insert(User record);
+
+    int insertSelective(User record);
+
+    List<User> selectByExampleWithRowbounds(UserExample example, RowBounds rowBounds);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Long id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }

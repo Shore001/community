@@ -21,33 +21,15 @@ import java.util.List;
 @Controller
 public class IndexController {
     //访问根目录时返回结果
-
-    @Autowired
-    private UserMapper userMapper;
-
     @Autowired
     private QuestionService questionService;
 
 
     @GetMapping("/")
-    public String hello(HttpServletRequest request,Model model,
+    public String hello(Model model,
                         @RequestParam(name = "pageIndex",defaultValue = "1")Integer pageIndex,
                         @RequestParam(name = "pageSize",defaultValue = "5")Integer pageSize
                         ){
-        Cookie[] cookies = request.getCookies();
-        if (cookies!=null){
-            for (Cookie cookie:cookies){
-                if (cookie.getName().equals("token")){
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user!=null){//用户信息放入Session中
-                        request.getSession().setAttribute("user",user);
-                    }
-                    break;
-                }
-            }
-        }
-
         PaginationDTO pagination = questionService.getList(pageIndex,pageSize);
         model.addAttribute("pagination",pagination);
         return "index";

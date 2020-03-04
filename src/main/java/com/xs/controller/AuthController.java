@@ -5,6 +5,7 @@ import com.xs.dto.GithubUser;
 import com.xs.mapper.UserMapper;
 import com.xs.model.User;
 import com.xs.provider.GithubProvider;
+import com.xs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class AuthController {
     private GithubProvider githubProvider;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     //从配置文件中读取属性值
     @Value("${github.client.id}")
@@ -50,14 +51,23 @@ public class AuthController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
+
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             //写入cookie
             response.addCookie(new Cookie("token",token));
             return "redirect:/";//重定向至根目录
         }else {//登录失败
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/loginOut")
+    public String loginOut(HttpServletRequest request,HttpServletResponse response){
+        request.getSession().removeAttribute("user");//清空session
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
